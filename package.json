@@ -1,7 +1,7 @@
 {
   "name": "coretana",
   "version": "0.1.0",
-  "description": "CoreTana — a private, local Apex sparring partner and teacher.",
+  "description": "CoreTana — a private, local, free Apex sparring partner and teacher.",
   "main": "./out/main/index.js",
   "author": "you",
   "private": true,
@@ -11,9 +11,6 @@
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
     "start": "electron-vite preview",
     "package": "electron-vite build && electron-builder"
-  },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.71.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",

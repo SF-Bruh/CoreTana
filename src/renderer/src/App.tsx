@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { CoreTanaAvatar, type AvatarForm } from './components/CoreTanaAvatar'
 import { ChatDock } from './components/ChatDock'
-import { ApiKeyGate } from './components/ApiKeyGate'
+import { OllamaGate } from './components/OllamaGate'
 import { LessonView } from './components/LessonView'
 import { QuizEngine } from './components/QuizEngine'
 import { useCoretanaChat } from './hooks/useCoretanaChat'
@@ -15,26 +15,21 @@ type View = 'learn' | 'spar'
 const lesson = LESSONS['variables-and-data-types']
 
 function App(): JSX.Element {
-  const [hasKey, setHasKey] = useState<boolean | null>(null)
+  const [model, setModel] = useState<string | null>(null)
   const [view, setView] = useState<View>('learn')
   const chat = useCoretanaChat()
 
   useEffect(() => {
-    window.coretana.getApiKeyStatus().then((status) => setHasKey(status.hasKey))
-  }, [])
-
-  useEffect(() => {
-    if (hasKey && chat.history.length === 0) {
+    if (model && chat.history.length === 0) {
       chat.send(
         `We're opening a session on "${lesson.title}". Greet me briefly and tell me what we're about to cover, in your voice.`,
         'downtime'
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasKey])
+  }, [model])
 
-  if (hasKey === null) return <div className="app-loading" />
-  if (!hasKey) return <ApiKeyGate onSaved={() => setHasKey(true)} />
+  if (!model) return <OllamaGate onReady={setModel} />
 
   const form: AvatarForm = view === 'spar' ? 'sparring' : 'orb'
 

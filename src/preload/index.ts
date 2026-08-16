@@ -1,14 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { IPC, type ChatMessage, type ApiKeyStatus, type CoreTanaMode } from '../shared/ipc'
+import { IPC, type ChatMessage, type OllamaStatus, type CoreTanaMode } from '../shared/ipc'
 
 /**
  * The only surface the renderer ever gets. No Node access, no raw
  * ipcRenderer, no filesystem — just these specific, typed calls.
  */
 const coretanaApi = {
-  getApiKeyStatus: (): Promise<ApiKeyStatus> => ipcRenderer.invoke(IPC.getApiKeyStatus),
-  setApiKey: (key: string): Promise<ApiKeyStatus> => ipcRenderer.invoke(IPC.setApiKey, key),
-  clearApiKey: (): Promise<ApiKeyStatus> => ipcRenderer.invoke(IPC.clearApiKey),
+  checkOllama: (): Promise<OllamaStatus> => ipcRenderer.invoke(IPC.checkOllama),
+  setModel: (model: string): Promise<{ configuredModel: string }> => ipcRenderer.invoke(IPC.setModel, model),
 
   sendMessage: (history: ChatMessage[], mode: CoreTanaMode): Promise<{ ok: boolean; message?: string }> =>
     ipcRenderer.invoke(IPC.sendMessage, { history, mode }),

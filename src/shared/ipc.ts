@@ -17,14 +17,19 @@ export interface CoreTanaReplyDone {
   fullText: string
 }
 
-export interface ApiKeyStatus {
-  hasKey: boolean
+/** Status of the local Ollama runtime — no API keys, no accounts, nothing paid. */
+export interface OllamaStatus {
+  /** Whether the local Ollama server answered at all. */
+  running: boolean
+  /** Model names Ollama already has pulled locally. */
+  installedModels: string[]
+  /** The model CoreTana is currently configured to use, if one was picked. */
+  configuredModel: string | null
 }
 
 export const IPC = {
-  getApiKeyStatus: 'coretana:get-api-key-status',
-  setApiKey: 'coretana:set-api-key',
-  clearApiKey: 'coretana:clear-api-key',
+  checkOllama: 'coretana:check-ollama',
+  setModel: 'coretana:set-model',
   sendMessage: 'coretana:send-message',
   streamChunk: 'coretana:stream-chunk',
   streamDone: 'coretana:stream-done',

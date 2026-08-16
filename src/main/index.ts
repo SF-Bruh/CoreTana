@@ -1,8 +1,8 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { is } from './isDev'
-import { hasApiKey, saveApiKey, clearApiKey } from './apiKeyStore'
-import { streamCoreTanaReply, MissingApiKeyError } from './anthropicClient'
+import { checkOllama, streamCoreTanaReply, MissingModelError } from './ollamaClient'
+import { getConfiguredModel, setConfiguredModel } from './modelConfig'
 import { IPC, type ChatMessage, type CoreTanaMode } from '../shared/ipc'
 
 function createWindow(): void {
@@ -42,16 +42,14 @@ function createWindow(): void {
   }
 }
 
-ipcMain.handle(IPC.getApiKeyStatus, () => ({ hasKey: hasApiKey() }))
-
-ipcMain.handle(IPC.setApiKey, (_event, key: string) => {
-  saveApiKey(key)
-  return { hasKey: true }
+ipcMain.handle(IPC.checkOllama, async () => {
+  const status = await checkOllama()
+  return { ...status, configuredModel: getConfiguredModel() }
 })
 
-ipcMain.handle(IPC.clearApiKey, () => {
-  clearApiKey()
-  return { hasKey: false }
+ipcMain.handle(IPC.setModel, (_event, model: string) => {
+  setConfiguredModel(model)
+  return { configuredModel: model }
 })
 
 ipcMain.handle(
@@ -65,7 +63,7 @@ ipcMain.handle(
       sender.send(IPC.streamDone, { fullText: full })
       return { ok: true }
     } catch (err) {
-      const message = err instanceof MissingApiKeyError ? err.message : (err as Error).message
+      const message = err instanceof MissingModelError ? err.message : (err as Error).message
       sender.send(IPC.streamError, { message })
       return { ok: false, message }
     }

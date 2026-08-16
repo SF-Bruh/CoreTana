@@ -1,9 +1,9 @@
 # CoreTana
 
-A private, local Apex teacher and sparring partner. No account, no server,
-nothing about your progress or your code ever leaves your machine except
-the specific message you send her, which goes straight to Anthropic's API
-using your own key.
+A private, local, **free** Apex teacher and sparring partner. No account, no
+server, no subscription, no per-message bill. She runs entirely on your
+machine, thinking with a free local model via [Ollama](https://ollama.com) —
+nothing about your progress or your code ever leaves your computer, ever.
 
 She idles as a living orb. When you start a drill set, she transforms into
 a holographic figure with a blue glow — that's sparring mode, and her voice
@@ -18,10 +18,11 @@ set she grades live.
 
 A local desktop app (Electron + React + TypeScript), not a website. Nothing
 is hosted. When you run it, a window opens on your machine and that's the
-whole footprint — no accounts, no telemetry, no cloud database.
+whole footprint — no accounts, no telemetry, no cloud database, no API
+billing anywhere.
 
-The only network calls it makes are direct, from your machine to
-`api.anthropic.com`, using an API key you provide.
+The only "network" call it makes is to `localhost:11434` — Ollama running on
+your own machine. Nothing ever goes out to the internet.
 
 ## Prerequisites
 
@@ -29,10 +30,19 @@ You need [Node.js](https://nodejs.org) installed (v20 or newer). If you've
 never used Node before: install it from that link, then everything below
 runs in a terminal in this project folder.
 
-You also need an Anthropic API key. Get one at
-[console.anthropic.com](https://console.anthropic.com) — it's pay-as-you-go,
-and Apex tutoring conversations are cheap (fractions of a cent to a few
-cents per message).
+You also need **[Ollama](https://ollama.com/download)** — a free app that
+runs open-source language models locally. Install it, then pull a model:
+
+```bash
+ollama pull qwen2.5-coder:7b
+```
+
+That's a solid, code-aware model (~5GB, one-time download, no cost). If your
+machine is limited on RAM, `ollama pull llama3.2` is a lighter fallback
+(smaller, faster, a bit less sharp).
+
+CoreTana will walk you through this same setup on first launch if you skip
+straight to running her.
 
 ## Running it locally (recommended while you're building it out)
 
@@ -42,11 +52,9 @@ npm run dev
 ```
 
 This opens CoreTana in a window on your machine, with hot-reload — any code
-change you make shows up instantly. First launch will ask you to paste your
-API key; it's encrypted with your OS's own keychain (`safeStorage` in
-Electron) and saved to your local user data folder. It is never written
-anywhere else, never committed to this repo, and never sent anywhere except
-directly to Anthropic when CoreTana replies.
+change you make shows up instantly. First launch checks for Ollama and lets
+you pick which pulled model she should use — that choice is saved locally
+and she remembers it next time.
 
 ## Building an installable app (the "exe")
 
@@ -64,8 +72,9 @@ installer for your OS in a new `release/` folder:
 - **Linux** → an `.AppImage` you can run directly
 
 That installer is the actual program — from then on you launch CoreTana
-like any other app on your machine, no terminal required. You only need
-`npm run dev` again if you want to change the code.
+like any other app on your machine, no terminal required (Ollama still needs
+to be installed and running in the background, same as before). You only
+need `npm run dev` again if you want to change the code.
 
 You're building this on your own machine for your own use, so there's no
 code-signing step required — Windows/macOS may show an "unknown publisher"
@@ -74,26 +83,24 @@ own unsigned build.
 
 ## Privacy & security notes
 
-- Nothing is hosted publicly. There is no server component to secure.
-- Your API key is encrypted at rest via your OS keychain and stored only in
-  Electron's local `userData` folder, not in this repository.
+- Nothing is hosted publicly. There is no server component to secure, no
+  account, and no API key of any kind.
+- Every model call happens against `localhost:11434` — Ollama refuses
+  connections from outside your machine by default, so nothing about your
+  code or conversations ever crosses the network.
 - The renderer (the UI) has no direct Node.js or filesystem access — it can
   only reach the outside world through a small, explicit bridge
   (`src/preload/index.ts`) that exposes exactly the calls it needs and
   nothing else. This is standard Electron hardening
   (`contextIsolation` + `sandbox`, no `nodeIntegration`).
-- All API calls to Anthropic happen in the main process, not the renderer —
-  your key is never exposed to any web content.
-- If you ever want to revoke access, delete the key from the in-app
-  settings (clears the encrypted file) and/or roll the key in the Anthropic
-  console.
+- All calls to Ollama happen in the main process, not the renderer.
 
 ## Project layout
 
 ```
 src/
-  main/        Electron main process — window creation, the Anthropic
-               client, the API-key store, CoreTana's persona/system prompt
+  main/        Electron main process — window creation, the Ollama
+               client, the model-choice store, CoreTana's persona/system prompt
   preload/     The one narrow, typed bridge exposed to the UI
   renderer/    The React app: avatar, lesson view, quiz engine, chat
   shared/      Types shared between main and renderer (IPC contract,
@@ -104,6 +111,11 @@ CoreTana's full character sheet lives in `src/main/persona.ts` — edit it
 there if you want to tune her voice, add new modes, or adjust how the
 render tags map to the avatar (see `src/renderer/src/components/
 CoreTanaAvatar.tsx` / `.css` for the visual side of those tags).
+
+Want to try a different local model later? Just pull it with Ollama and pick
+it from the model list next time CoreTana asks (or delete
+`coretana-model.json` from the app's local data folder to re-trigger the
+picker).
 
 ## What's next
 
