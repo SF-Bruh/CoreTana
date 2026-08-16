@@ -7,6 +7,7 @@
   --coretana-shift-x: 0px;
   --coretana-shift-y: 0px;
   --coretana-scale: 1;
+  --coretana-rain-duration: 2.6s;
 
   position: relative;
   width: 100%;
@@ -142,17 +143,65 @@
   50% { opacity: 1; }
 }
 
-.figure-scanlines {
-  stroke: hsl(var(--coretana-hue) 100% 85% / 0.5);
-  stroke-width: 1;
-  opacity: 0.35;
-  animation: scanline-drift 3.2s linear infinite;
+.figure-hair {
+  opacity: calc(0.98 * var(--coretana-flicker));
 }
 
-@keyframes scanline-drift {
-  0% { transform: translateY(-6px); opacity: 0.05; }
-  50% { opacity: 0.4; }
-  100% { transform: translateY(300px); opacity: 0.05; }
+.figure-face {
+  opacity: var(--coretana-flicker);
+}
+
+.figure-eye {
+  fill: white;
+  animation: eye-glow 3.4s ease-in-out infinite;
+}
+
+.figure-mouth {
+  fill: none;
+  stroke: white;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+@keyframes eye-glow {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+/* code/data streams drifting across her skin */
+
+.rain-rect {
+  animation: rain-scroll var(--coretana-rain-duration, 2.6s) linear infinite;
+}
+
+@keyframes rain-scroll {
+  from { transform: translateY(0); }
+  to { transform: translateY(40px); }
+}
+
+.rain-glyph {
+  stroke: var(--coretana-glow-bright);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: 0.7;
+  animation: rain-glyph-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes rain-glyph-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+}
+
+/* subtle extra brightness while she's actually speaking */
+
+.is-speaking .figure-glow,
+.is-speaking .figure-hair {
+  animation-duration: 2.4s;
+}
+
+.is-speaking .rain-rect {
+  animation-duration: calc(var(--coretana-rain-duration, 2.6s) * 0.6);
 }
 
 /* ---------- transition burst ---------- */
@@ -180,11 +229,13 @@
 .mood-calm {
   --coretana-hue: 205;
   --coretana-flicker: 1;
+  --coretana-rain-duration: 3.2s;
 }
 
 .mood-amused {
   --coretana-hue: 190;
   --coretana-flicker: 1.05;
+  --coretana-rain-duration: 2s;
 }
 
 .mood-urgent {
@@ -192,10 +243,12 @@
   --coretana-glow-bright: hsl(32 100% 75%);
   --coretana-glow-mid: hsl(24 95% 55%);
   --coretana-glow-dim: hsl(210 90% 32%);
+  --coretana-rain-duration: 1.3s;
 }
 
 .mood-strain {
   --coretana-hue: 205;
+  --coretana-rain-duration: 1.6s;
   animation: strain-flicker 1.4s steps(12, end) infinite;
 }
 

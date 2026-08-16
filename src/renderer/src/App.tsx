@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CoreTanaAvatar, type AvatarForm } from './components/CoreTanaAvatar'
 import { ChatDock } from './components/ChatDock'
 import { OllamaGate } from './components/OllamaGate'
 import { LessonView } from './components/LessonView'
 import { QuizEngine } from './components/QuizEngine'
+import { VoiceControls } from './components/VoiceControls'
 import { useCoretanaChat } from './hooks/useCoretanaChat'
+import { useSpeech } from './hooks/useSpeech'
 import { LESSONS } from './content/lessons'
 import { CURRICULUM } from './content/curriculum'
 import type { McqQuestion } from './content/types'
@@ -18,6 +20,8 @@ function App(): JSX.Element {
   const [model, setModel] = useState<string | null>(null)
   const [view, setView] = useState<View>('learn')
   const chat = useCoretanaChat()
+  const speech = useSpeech()
+  const wasStreamingRef = useRef(false)
 
   useEffect(() => {
     if (model && chat.history.length === 0) {
@@ -28,6 +32,13 @@ function App(): JSX.Element {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model])
+
+  useEffect(() => {
+    if (wasStreamingRef.current && !chat.isStreaming && !chat.error) {
+      speech.speak(chat.displayText)
+    }
+    wasStreamingRef.current = chat.isStreaming
+  }, [chat.isStreaming, chat.error, chat.displayText, speech.speak])
 
   if (!model) return <OllamaGate onReady={setModel} />
 
@@ -74,6 +85,14 @@ function App(): JSX.Element {
             Spar
           </button>
         </nav>
+        <VoiceControls
+          supported={speech.supported}
+          enabled={speech.enabled}
+          onToggle={speech.setEnabled}
+          voices={speech.voices}
+          voiceURI={speech.voiceURI}
+          onVoiceChange={speech.setVoiceURI}
+        />
         <div className="app-curriculum">
           <div className="app-curriculum-title">Roadmap</div>
           {CURRICULUM.map((entry) => (
@@ -86,7 +105,7 @@ function App(): JSX.Element {
 
       <main className="app-main">
         <div className="app-avatar-stage">
-          <CoreTanaAvatar form={form} mood={chat.mood} posture={chat.posture} />
+          <CoreTanaAvatar form={form} mood={chat.mood} posture={chat.posture} speaking={speech.isSpeaking} />
         </div>
         <ChatDock
           speakerLabel="CoreTana"
