@@ -1,0 +1,42 @@
+.chat-dock {
+  width: 100%;
+  min-height: 84px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: rgba(8, 14, 26, 0.7);
+  border: 1px solid rgba(110, 180, 255, 0.2);
+  backdrop-filter: blur(6px);
+}
+
+.chat-dock-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5fa8e0;
+  margin-bottom: 6px;
+}
+
+.chat-dock-text {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #e6f1ff;
+  white-space: pre-wrap;
+}
+
+.chat-dock-error {
+  color: #ff9a9a;
+}
+
+.chat-dock-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  margin-left: 2px;
+  background: #6fc4ff;
+  vertical-align: text-bottom;
+  animation: cursor-blink 0.9s steps(1) infinite;
+}
+
+@keyframes cursor-blink {
+  50% { opacity: 0; }
+}
