@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import type { MoodTag, PostureTag } from '@shared/renderTags'
 import { CoreTanaFigure3D } from './CoreTanaFigure3D'
+import { CoreTanaOrb3D } from './CoreTanaOrb3D'
 import './CoreTanaAvatar.css'
 
 export type AvatarForm = 'orb' | 'sparring'
@@ -39,10 +40,9 @@ export function CoreTanaAvatar({ form, mood, posture, speaking }: CoreTanaAvatar
       <div className="stage">
         <div className="orb-layer">
           <div className="orb-halo" />
-          <div className="orb-core" />
-          <div className="orb-ring ring-1" />
-          <div className="orb-ring ring-2" />
-          <div className="orb-spark" />
+          {form === 'orb' && (
+            <CoreTanaOrb3D mood={mood} posture={posture} speaking={Boolean(speaking)} />
+          )}
         </div>
 
         <div className="figure-layer">

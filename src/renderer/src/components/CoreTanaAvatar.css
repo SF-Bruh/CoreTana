@@ -52,59 +52,9 @@
   animation: orb-breathe 4.2s ease-in-out infinite;
 }
 
-.orb-core {
-  position: absolute;
-  width: 46%;
-  height: 46%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, var(--coretana-glow-bright) 0%, var(--coretana-glow-mid) 45%, var(--coretana-glow-dim) 100%);
-  box-shadow: 0 0 40px 6px hsl(var(--coretana-hue) 90% 55% / 0.6);
-  opacity: var(--coretana-flicker);
-  animation: orb-breathe 4.2s ease-in-out infinite;
-}
-
-.orb-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid hsl(var(--coretana-hue) 90% 70% / 0.35);
-}
-
-.ring-1 {
-  width: 62%;
-  height: 62%;
-  animation: orb-spin 14s linear infinite;
-}
-
-.ring-2 {
-  width: 74%;
-  height: 74%;
-  border-style: dashed;
-  animation: orb-spin 22s linear infinite reverse;
-}
-
-.orb-spark {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: white;
-  box-shadow: 0 0 12px 3px white;
-  animation: orb-spark-orbit 3.6s linear infinite;
-}
-
 @keyframes orb-breathe {
   0%, 100% { transform: scale(1); opacity: calc(0.85 * var(--coretana-flicker)); }
   50% { transform: scale(1.06); opacity: var(--coretana-flicker); }
-}
-
-@keyframes orb-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes orb-spark-orbit {
-  from { transform: rotate(0deg) translateX(31%) rotate(0deg); }
-  to { transform: rotate(360deg) translateX(31%) rotate(-360deg); }
 }
 
 /* ---------- FIGURE (sparring) ---------- */
