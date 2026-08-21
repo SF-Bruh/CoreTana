@@ -10,7 +10,10 @@ interface ChatDockProps {
 export function ChatDock({ speakerLabel, text, isStreaming, error }: ChatDockProps): JSX.Element {
   return (
     <div className="chat-dock">
-      <div className="chat-dock-label">{speakerLabel}</div>
+      <div className="chat-dock-label">
+        <span className={`chat-dock-status ${isStreaming ? 'live' : ''}`} />
+        {speakerLabel}
+      </div>
       <div className="chat-dock-text">
         {error ? (
           <span className="chat-dock-error">Connection dropped: {error}</span>

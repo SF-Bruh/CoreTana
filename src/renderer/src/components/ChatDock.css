@@ -1,30 +1,54 @@
 .chat-dock {
+  position: relative;
   width: 100%;
-  min-height: 84px;
-  padding: 14px 20px;
-  border-radius: 12px;
-  background: rgba(8, 14, 26, 0.7);
-  border: 1px solid rgba(110, 180, 255, 0.2);
-  backdrop-filter: blur(6px);
+  min-height: 88px;
+  padding: 15px 20px;
+  border-radius: var(--radius-md);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-soft);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-panel);
+  z-index: 1;
 }
 
 .chat-dock-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-size: 0.7rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #5fa8e0;
-  margin-bottom: 6px;
+  color: var(--accent);
+  margin-bottom: 7px;
+}
+
+.chat-dock-status {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}
+
+.chat-dock-status.live {
+  background: var(--accent-bright);
+  box-shadow: 0 0 8px 2px rgba(143, 216, 255, 0.7);
+  animation: status-pulse 1s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 .chat-dock-text {
   font-size: 0.98rem;
   line-height: 1.55;
-  color: #e6f1ff;
+  color: var(--text-primary);
   white-space: pre-wrap;
 }
 
 .chat-dock-error {
-  color: #ff9a9a;
+  color: var(--danger);
 }
 
 .chat-dock-cursor {
@@ -32,7 +56,7 @@
   width: 7px;
   height: 1em;
   margin-left: 2px;
-  background: #6fc4ff;
+  background: var(--accent-bright);
   vertical-align: text-bottom;
   animation: cursor-blink 0.9s steps(1) infinite;
 }

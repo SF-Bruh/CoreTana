@@ -2,6 +2,40 @@
   box-sizing: border-box;
 }
 
+:root {
+  --bg-void: #05070c;
+  --bg-deep: #0a1220;
+  --bg-panel: rgba(11, 19, 34, 0.6);
+  --bg-panel-solid: #0b1424;
+  --bg-inset: rgba(5, 9, 18, 0.85);
+
+  --border-faint: rgba(110, 180, 255, 0.08);
+  --border-soft: rgba(110, 180, 255, 0.16);
+  --border-strong: rgba(110, 180, 255, 0.36);
+
+  --accent: #4fb2ff;
+  --accent-2: #2a6fe0;
+  --accent-bright: #8fd8ff;
+  --accent-dim: #1c5fa8;
+
+  --text-primary: #eaf4ff;
+  --text-secondary: #bdd2e8;
+  --text-muted: #7d93ac;
+  --text-dim: #4a5f78;
+
+  --danger: #ff8a8a;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --shadow-panel: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 44px rgba(79, 178, 255, 0.1);
+
+  --font-mono: 'SF Mono', 'Cascadia Code', Consolas, Menlo, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Segoe UI Variable', Roboto, sans-serif;
+}
+
 html,
 body,
 #root {
@@ -10,9 +44,9 @@ body,
 }
 
 body {
-  background: radial-gradient(ellipse at 50% 0%, #0c1626 0%, #05070c 60%);
-  color: #e6f1ff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
   overflow: hidden;
 }
 
@@ -20,7 +54,40 @@ button {
   font-family: inherit;
 }
 
+::selection {
+  background: rgba(79, 178, 255, 0.35);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(110, 180, 255, 0.18);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(110, 180, 255, 0.32);
+  background-clip: padding-box;
+}
+
 .app-loading {
   height: 100vh;
   width: 100vw;
+  background: var(--bg-void);
 }
+
+/* shared Apex code-token colors, used by lesson + drill code blocks */
+.tok-keyword { color: #ff9d7a; }
+.tok-type { color: #7ecbff; }
+.tok-string { color: #a8e88f; }
+.tok-number { color: #ffd57e; }
+.tok-comment { color: var(--text-dim); font-style: italic; }

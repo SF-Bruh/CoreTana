@@ -45,22 +45,34 @@ export function OllamaGate({ onReady }: OllamaGateProps): JSX.Element {
   return (
     <div className="ollama-gate">
       <div className="ollama-card">
+        <div className="ollama-orb" />
         <h1>CoreTana needs a local model to think with.</h1>
         <p className="ollama-sub">
           No API key, no account, no cost — she runs entirely on your machine through{' '}
           <strong>Ollama</strong>, a free local model runner.
         </p>
 
-        {phase === 'checking' && <p className="ollama-status">Checking for Ollama…</p>}
+        {phase === 'checking' && (
+          <p className="ollama-status">
+            <span className="ollama-spinner" />
+            Checking for Ollama…
+          </p>
+        )}
 
         {phase === 'not-running' && (
           <>
-            <ol className="ollama-steps">
-              <li>
-                Install Ollama from <span className="ollama-code">ollama.com/download</span> (free).
-              </li>
-              <li>Ollama runs as a background service once installed — no need to keep a terminal open.</li>
-            </ol>
+            <div className="ollama-steps">
+              <div className="ollama-step">
+                <span className="ollama-step-num">1</span>
+                <span>
+                  Install Ollama from <span className="ollama-code">ollama.com/download</span> (free).
+                </span>
+              </div>
+              <div className="ollama-step">
+                <span className="ollama-step-num">2</span>
+                <span>Ollama runs as a background service once installed — no terminal needed.</span>
+              </div>
+            </div>
             <button disabled={busy} onClick={() => void refresh()}>
               Check again
             </button>
@@ -87,6 +99,7 @@ export function OllamaGate({ onReady }: OllamaGateProps): JSX.Element {
             <div className="ollama-model-list">
               {installedModels.map((m) => (
                 <button key={m} disabled={busy} onClick={() => void pick(m)}>
+                  <span className="ollama-model-dot" />
                   {m}
                 </button>
               ))}

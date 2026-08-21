@@ -1,84 +1,182 @@
 .app-shell {
   display: grid;
-  grid-template-columns: 220px 1fr 1fr;
+  grid-template-columns: 236px 1fr 1fr;
   height: 100vh;
   width: 100vw;
+  background:
+    radial-gradient(ellipse 900px 500px at 62% -10%, rgba(60, 130, 220, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 0%, var(--bg-deep) 0%, var(--bg-void) 62%);
 }
 
+/* ---------- sidebar ---------- */
+
 .app-sidebar {
-  padding: 20px 16px;
-  border-right: 1px solid rgba(110, 180, 255, 0.12);
+  padding: 22px 16px 16px;
+  border-right: 1px solid var(--border-faint);
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
   overflow-y: auto;
+  background: linear-gradient(180deg, rgba(10, 18, 32, 0.4), transparent 12%);
 }
 
 .app-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  font-size: 0.85rem;
-  color: #6fc4ff;
+  letter-spacing: 0.18em;
+  font-size: 0.86rem;
+  color: var(--accent-bright);
+  padding: 2px 4px 12px;
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.app-brand-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-bright);
+  box-shadow: 0 0 10px 2px rgba(143, 216, 255, 0.8);
+  animation: brand-pulse 2.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes brand-pulse {
+  0%, 100% { opacity: 0.65; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.app-section-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  padding: 0 4px;
 }
 
 .app-nav {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 3px;
 }
 
 .app-nav button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   text-align: left;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: none;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  border-left: 2px solid transparent;
   background: transparent;
-  color: #9fb4cc;
+  color: var(--text-muted);
   cursor: pointer;
   font-size: 0.88rem;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.app-nav button svg {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.app-nav button:not(.active):hover {
+  background: rgba(79, 178, 255, 0.06);
+  color: var(--text-secondary);
 }
 
 .app-nav button.active {
-  background: rgba(79, 178, 255, 0.14);
-  color: #d8ecff;
+  background: rgba(79, 178, 255, 0.12);
+  border-left-color: var(--accent);
+  color: var(--text-primary);
 }
 
-.app-curriculum-title {
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #4a5f78;
-  margin-bottom: 10px;
+.app-nav button.active svg {
+  opacity: 1;
+}
+
+.app-curriculum {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.app-curriculum-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
 }
 
 .curriculum-entry {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   font-size: 0.82rem;
-  padding: 6px 0;
-  color: #cfe2f5;
-  border-bottom: 1px solid rgba(110, 180, 255, 0.06);
+  padding: 7px 4px;
+  color: var(--text-secondary);
+  border-radius: 6px;
+}
+
+.curriculum-entry-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px 1px rgba(79, 178, 255, 0.7);
+  flex-shrink: 0;
 }
 
 .curriculum-entry.locked {
-  color: #3f4f63;
+  color: var(--text-dim);
 }
 
+.curriculum-entry.locked .curriculum-entry-dot {
+  background: var(--text-dim);
+  box-shadow: none;
+}
+
+/* ---------- main (avatar + chat) ---------- */
+
 .app-main {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 22px;
   padding: 24px;
-  border-right: 1px solid rgba(110, 180, 255, 0.12);
+  border-right: 1px solid var(--border-faint);
+  overflow: hidden;
+}
+
+.app-main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--border-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-faint) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 42%, black 0%, transparent 75%);
+  opacity: 0.6;
 }
 
 .app-avatar-stage {
+  position: relative;
   flex: 1;
   width: 100%;
   min-height: 0;
+  z-index: 1;
 }
 
+/* ---------- content panel ---------- */
+
 .app-content {
-  padding: 28px 32px;
+  padding: 30px 34px;
   overflow-y: auto;
 }
